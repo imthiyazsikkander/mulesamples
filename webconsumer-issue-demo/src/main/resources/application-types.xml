@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="wsdl-service-number-test" format="xml">
+      <types:example format="xml" element="{http://www.dataaccess.com/webservicesserver/}NumberToDollars" location="examples/samplesoaptest.xml"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#d5b88298-d04f-4407-a6c0-b27410ecccac">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="wsdl-service-number-test"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

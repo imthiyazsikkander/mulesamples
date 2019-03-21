@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="716f5972-34ec-412e-aef7-2cd2f734a41b" >
+		<wsc:connection wsdlLocation="wsdl/number-wsdl.wsdl" service="NumberConversion" port="NumberConversionSoap" address="http://www.dataaccess.com/webservicesserver/numberconversion.wso" />
+	</wsc:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="01d6c8cf-a416-4866-8359-730ff0517341" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="webconsumer-issue-demoFlow" doc:id="e1cf344c-3c2b-4fc5-8c4f-f4f2b79188fe" >
+		<http:listener doc:name="Listener" doc:id="7da93c6d-a910-469c-9cd3-9f79d7e4c68e" config-ref="HTTP_Listener_config" path="/test"/>
+		<ee:transform doc:name="Transform Message" doc:id="d5b88298-d04f-4407-a6c0-b27410ecccac" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.dataaccess.com/webservicesserver/
+---
+{
+	ns0#NumberToDollars: {
+		ns0#dNum: 100000
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume doc:name="Consume" doc:id="221b663b-e1cf-4088-9ca9-4eab58c64dd0" config-ref="Web_Service_Consumer_Config" operation="NumberToDollars"/>
+		<logger level="INFO" doc:name="Logger" doc:id="8414ff7c-9229-42b2-a2f7-cd42f23f19bb" message="TEST OUTPUT &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;#[payload]"/>
+	</flow>
+</mule>
