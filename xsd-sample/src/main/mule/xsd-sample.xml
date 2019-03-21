@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6cb6d5aa-0041-405d-aa5f-554de77dbd8b" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="xsd-sampleFlow" doc:id="1fb0fbf8-7440-4ae4-a688-e259df939e52" >
+		<http:listener doc:name="Listener" doc:id="3aae387a-e19f-490d-b0fa-609ce7052d39" config-ref="HTTP_Listener_config" path="/test"/>
+		<ee:transform doc:name="Sample XSD" doc:id="b776e173-c6b9-4578-9cc9-b37b1faa60e7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.atypon.com/literatum/alertsubscription.1.2
+---
+{
+	ns0#alert @("alert-type": "TestAlert" , frequency: "100"): {
+		ns0#"alert-code": "ALERCODE:001",
+		ns0#log @(item: "001"): "Log"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Sample XML" doc:id="99ebe876-75b1-4e95-ad22-1079f148d1d5" message="XSD Sample &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;#[payload]"/>
+		<ee:transform doc:name="Sample JSON" doc:id="6a851dff-9c73-471f-a770-fd79d52f8879" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	swagger: "TEST",
+	info: {
+		version: "TEST",
+		title: "TEST"
+	},
+	host: "TEST",
+	basePath: "TEST",
+	schemes: "TEST",
+	paths: {
+		"/acs/clients": {
+			get: "TEST"
+		},
+		"/acs/clients/{customerNumber}": {
+			get: {
+				tags: "TEST",
+				summary: "TEST",
+				operationId: "TEST",
+				consumes: "TEST",
+				produces: "TEST",
+				parameters: [{
+					name: "TEST",
+					in: "TEST",
+					description: "TEST",
+					required: "TEST",
+					"type": "TEST"
+				}]
+			}
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Sample JSON" doc:id="4c4ea5a0-822a-4b7e-95ef-3019da6ae9b7" message="XSD Sample &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;#[payload]" />
+	</flow>
+</mule>

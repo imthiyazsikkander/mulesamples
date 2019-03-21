@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  "-//Atypon//DTD Literatum Alert Subscription Element Classes v1.2 20140606//EN"
+  Delivered as file "alertsubscription.1.2.ent"
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           xmlns:alertsubscription="http://www.atypon.com/literatum/alertsubscription.1.2"
+           targetNamespace="http://www.atypon.com/literatum/alertsubscription.1.2">
+    <xs:element name="alert">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="alertsubscription:alert-code"/>
+                <xs:element minOccurs="0" ref="alertsubscription:website-code"/>
+                <xs:element minOccurs="0" maxOccurs="5" ref="alertsubscription:log"/>
+            </xs:sequence>
+            <xs:attribute name="alert-type" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="art-by-art"/>
+                        <xs:enumeration value="citation-tracking"/>
+                        <xs:enumeration value="collection"/>
+                        <xs:enumeration value="custom"/>
+                        <xs:enumeration value="toc"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="frequency">
+                <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                        <xs:enumeration value="never"/>
+                        <xs:enumeration value="daily"/>
+                        <xs:enumeration value="weekly"/>
+                        <xs:enumeration value="monthly"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="alert-code" type="xs:string"/>
+    <xs:element name="website-code" type="xs:string"/>
+    <xs:element name="log">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="item" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:token">
+                                <xs:enumeration value="optin-email"/>
+                                <xs:enumeration value="optin-ip"/>
+                                <xs:enumeration value="optin-url"/>
+                                <xs:enumeration value="optin-date"/>
+                                <xs:enumeration value="optin-country-code"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
